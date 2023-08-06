@@ -1,11 +1,36 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-</head>
-<body>
-    hello world!
-</body>
+<html lang="ko">
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>우유팩 건전지 수거 프로그램</title>
+        <link rel="stylesheet" href="style.css">
+    </head>
+    <body>
+        <div class="main-container">
+            <div class="Quest_mainitem">
+                <p style="padding: 10px; margin: 5px 0;">
+                    안녕하세요👋<br>우유팩과 건전지를 반납하신 적이 있으신가요?
+                </p>
+            </div>
+            <div class="subQuest mainitem" id="select">
+                <h3></h3>
+            </div>
+        </div>
+    
+        <div class="action-container">
+            <div id="ch1" onclick="changeDesign()">
+                <img src="image/기존.png" width="280px" onmouseover="adjustBrightness1(0.4)" onmouseout="adjustBrightness1(1)" />
+                <br><div class="simpleText">반납한 적이 있습니다</div>
+            </div>
+            
+            <div id="ch2" onclick="changeDesign()">
+                <img src="image/신규.png" width="280px" onmouseover="adjustBrightness2(0.4)" onmouseout="adjustBrightness2(1)" />
+                <br><div class="simpleText">처음 방문입니다</div>
+            </div>
+        </div>
+
+        <script src="./script.js"></script>
+  </body>
 </html>
