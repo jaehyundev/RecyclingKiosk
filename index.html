@@ -21,16 +21,1023 @@
     
         <div class="action-container">
             <div id="ch1" onclick="changeDesign()">
-                <img src="image/기존.png" width="280px" onmouseover="adjustBrightness1(0.4)" onmouseout="adjustBrightness1(1)" />
+                <img src="image/기존.png" width="280px" class="imgg" onmouseover="adjustBrightness1(0.4)" onmouseout="adjustBrightness1(1)" />
                 <br><div class="simpleText">반납한 적이 있습니다</div>
             </div>
             
             <div id="ch2" onclick="changeDesign()">
-                <img src="image/신규.png" width="280px" onmouseover="adjustBrightness2(0.4)" onmouseout="adjustBrightness2(1)" />
+                <img src="image/신규.png" width="280px" class="imgg" onmouseover="adjustBrightness2(0.4)" onmouseout="adjustBrightness2(1)" />
                 <br><div class="simpleText">처음 방문입니다</div>
             </div>
         </div>
 
-        <script src="./script.js"></script>
+    <script>
+        // 애니메이션 클래스 추가하여 씬 전환 애니메이션 적용
+        const mainContainerr = document.querySelector("body");
+        mainContainerr.classList.add("scene-transition");
+
+        // 애니메이션이 재생된 후, 클래스 제거하여 다음 씬 전환을 위해 준비
+        setTimeout(function () {
+            mainContainerr.classList.remove("scene-transition");
+        }, 1000); // 2초간 애니메이션 재생
+
+        var timeRef = setTimeout(function () {
+        changeDesign();
+        state = 1;
+        }, 100000000); // 1000분 뒤에 자동으로 기존 회원 우유팩, 건전지 선택 씬으로 이동
+
+        // 타이머 중지 함수
+        function stopTimer(){
+            clearTimeout(timeRef);
+        }
+
+        // 오디오 출력
+        var scene1 = new Audio("audio/scene1.mp3");
+        var scene2 = new Audio("audio/scene2.mp3");
+        var scene3_1 = new Audio("audio/scene3_1.mp3");
+        var scene3_2 = new Audio("audio/scene3_2.mp3");
+        var scene4 = new Audio("audio/scene4.mp3");
+        scene1.play();
+
+        var set = 0; // 1:우유팩 2:화장지
+        var result = 0; // 반환 화장지, 봉투 계수 저장
+        var resultName = "";
+
+        // 이미지 클릭시 이름 변경
+        var leftImageContainer;
+        var rightImageContainer;
+
+        var choTitle = document.getElementById("select");
+
+        var state = 0; // 1 -> 회원 2 -> 비회원
+        
+        function changeDesign() { // 우유팩 건전지 선택 씬으로 넘어가기
+            // 4초 이전에 타이머 중지
+            stopTimer();
+            scene1.pause();
+            scene2.play();
+                // 애니메이션 클래스 추가하여 씬 전환 애니메이션 적용
+                var mainContainer = document.querySelector(".main-container");
+                mainContainer.classList.add("scene-transition");
+                mainContainer.innerHTML = `
+                    <div class="Quest_mainitem"><p style="padding: 10px;">🤔어떤 걸 반납하시나요?</p1></div>
+                `;
+
+                var actionContainer = document.querySelector(".action-container");
+                actionContainer.classList.add("scene-transition");
+                actionContainer.innerHTML = `
+                    <div class="next" id="chu1">
+                        <img src="image/우유팩.png" class="imgg" width="280px" onmouseover="adjustBrightness11(0.4)" onmouseout="adjustBrightness11(1)" />
+                        <br><div class="simpleText">우유팩</div>
+                    </div>
+                    <div class="next" id="chu2">
+                        <img src="image/건전지.png" class="imgg" width="280px" onmouseover="adjustBrightness22(0.4)" onmouseout="adjustBrightness22(1)" />
+                        <br><div class="simpleText">건전지</div>
+                    </div>
+                `;
+
+                // 애니메이션이 재생된 후, 클래스 제거하여 다음 씬 전환을 위해 준비
+                setTimeout(function () {
+                    mainContainer.classList.remove("scene-transition");
+                    actionContainer.classList.remove("scene-transition");
+                }, 1000); // 2초간 애니메이션 재생
+
+            leftImageContainer = document.getElementById("chu1");
+            rightImageContainer = document.getElementById("chu2");
+            leftImageContainer.addEventListener("click", LFunc);
+            rightImageContainer.addEventListener("click", RFunc);
+
+            var nextButtons = document.querySelectorAll(".next");
+                nextButtons.forEach(function (button) {
+                button.addEventListener("click", handleNextClick);
+            });
+
+            var leftImageContainer = document.getElementById("chu1");
+            var rightImageContainer = document.getElementById("chu2");
+            var choTitle = document.getElementById("select");
+
+            leftImageContainer.addEventListener("click", LFunc);
+            rightImageContainer.addEventListener("click", RFunc);
+
+            function LFunc(event) {
+                set = 1;
+                resultName = "화장지"
+            }
+
+            function RFunc(event) {
+                set = 2;
+                resultName = "종량제 봉투"
+            }
+        }
+
+        // 이미지에 마우스 올라가면 밝기 수정 -> 회원 비회원 선택 씬
+        function adjustBrightness1(brightness) {
+            var image = document.getElementById("ch1");
+            image.style.filter = "brightness(" + brightness + ")";
+        }
+
+        function adjustBrightness2(brightness) {
+            var image = document.getElementById("ch2");
+            image.style.filter = "brightness(" + brightness + ")";
+        }
+
+        // 마우스 올라가면 밝기 수정 -> 우유팩 건전지 선택 씬
+        function adjustBrightness11(brightness) {
+            var image = document.getElementById("chu1");
+            image.style.filter = "brightness(" + brightness + ")";
+        }
+        function adjustBrightness22(brightness) {
+            var image = document.getElementById("chu2");
+            image.style.filter = "brightness(" + brightness + ")";
+        }
+
+        // 이미지 클릭시 회원, 비회원 상태 변수 변경
+        var leftImageContainer_state = document.getElementById("ch1");
+        var rightImageContainer_state = document.getElementById("ch2");
+
+        leftImageContainer_state.addEventListener("click", LFuncState);
+        rightImageContainer_state.addEventListener("click", RFuncState);
+
+        function LFuncState(event) { // 회원
+            state = 1;
+        }
+
+        function RFuncState(event) { // 비회원
+            state = 2;
+        }
+
+        // 이미지 클릭시 이름 변경
+
+        function handleNextClick() { // 우유팩 건전지 선택시 인적사항 작성씬
+            // 애니메이션 적용
+            var body = document.querySelector("body");
+            body.classList.add("scene-transition");
+
+            var placeholders_1 = ["홍길동", "0", "0"];
+            var placeholders_2 = ["홍길동", "성남동 0000", "010-0000-0000", "0", "0"];
+
+            if(state == 1){ // 회원
+                var questDiv = document.querySelector(".Quest_mainitem");
+                questDiv.querySelector("p").textContent = "✍️인적사항을 작성해주세요";
+                scene2.pause();
+                scene3_1.play();
+                var actionContainer = document.querySelector(".action-container");
+                actionContainer.style.flexDirection = "column";
+                actionContainer.style.display = "flex";
+                actionContainer.style.alignItems = "center";
+
+                var actionContainer = document.querySelector(".action-container");
+
+                // actionContainer 내부의 내용 삭제
+                actionContainer.innerHTML = "";
+
+                var labels = ["🧑 성함", "🥛 우유팩 반납수량", "🔋 건전지 반납수량"];
+
+                for (var i = 0; i < labels.length; i++) {
+                    var label = document.createElement("span");
+                    label.textContent = labels[i];
+                    // 필요한 속성 및 스타일을 추가로 설정할 수 있습니다.
+
+                    var input = document.createElement("input");
+                    input.setAttribute("type", "text");
+                    input.setAttribute("id", "input-" + (i + 1));
+                    input.setAttribute("autofocus", "autofocus");
+                    input.setAttribute("placeholder", placeholders_1[i]);
+                    // 필요한 속성 및 스타일을 추가로 설정할 수 있습니다.
+
+                    var container = document.createElement("div");
+                    container.appendChild(label);
+                    container.appendChild(input);
+
+                    // 텍스트와 input 요소를 감싸는 container(div)의 가로 크기를 설정하여 가로 공백 추가
+                    container.style.width = "400px"; // 원하는 가로 크기로 조정합니다.
+                    container.style.marginBottom = "10px";
+
+                    // actionContainer에 container(div)을 추가합니다.
+                    actionContainer.appendChild(container);
+                }
+
+            } else if(state == 2){ // 비회원
+                var questDiv = document.querySelector(".Quest_mainitem");
+                questDiv.querySelector("p").textContent = "✍️인적사항을 작성해주세요";
+                scene2.pause();
+                scene3_2.play();
+                var actionContainer = document.querySelector(".action-container");
+                actionContainer.style.flexDirection = "column";
+                actionContainer.style.display = "flex";
+                actionContainer.style.alignItems = "center";
+
+                var actionContainer = document.querySelector(".action-container");
+
+                // actionContainer 내부의 내용 삭제
+                actionContainer.innerHTML = "";
+
+                var labels = ["🧑 성함", "📫 주소", "📞 전화번호", "🥛 우유팩 반납수량", "🔋 건전지 반납수량"];
+
+                for (var i = 0; i < labels.length; i++) {
+                var label = document.createElement("span");
+                label.textContent = labels[i];
+                // 필요한 속성 및 스타일을 추가로 설정할 수 있습니다.
+
+                var input = document.createElement("input");
+                input.setAttribute("type", "text");
+                input.setAttribute("id", "input-" + (i + 1));
+                input.setAttribute("autofocus", "autofocus");
+                input.setAttribute("placeholder", placeholders_2[i]);
+                // 필요한 속성 및 스타일을 추가로 설정할 수 있습니다.
+
+                var container = document.createElement("div");
+                container.appendChild(label);
+                container.appendChild(input);
+
+                // 텍스트와 input 요소를 감싸는 container(div)의 가로 크기를 설정하여 가로 공백 추가
+                container.style.width = "400px"; // 원하는 가로 크기로 조정합니다.
+                container.style.marginBottom = "10px";
+
+                // actionContainer에 container(div)을 추가합니다.
+                actionContainer.appendChild(container);
+            }
+        }
+        // 애니메이션이 재생된 후, 클래스 제거하여 다음 씬 전환을 위해 준비
+        setTimeout(function () {
+            body.classList.remove("scene-transition");
+        }, 1000); // 2초간 애니메이션 재생
+
+        // 숫자 입력 필드에 입력 제한 이벤트 리스너 추가
+        if(state == 1){
+            const numberInput1 = document.getElementById("input-2");
+            const numberInput2 = document.getElementById("input-3");
+            numberInput1.addEventListener("input", validateNumberInput);
+            numberInput2.addEventListener("input", validateNumberInput);
+        } else if(state == 2){
+            const numberInputt1 = document.getElementById("input-4");
+            const numberInputt2 = document.getElementById("input-5");
+            numberInputt1.addEventListener("input", validateNumberInput);
+            numberInputt2.addEventListener("input", validateNumberInput);
+        }
+
+        // 제출하기 버튼 생성
+        var submitButton = document.createElement("div");
+        submitButton.classList.add("submit");
+        submitButton.setAttribute("id", "submit-button");
+        submitButton.textContent = "🚀제출하기";
+        actionContainer.appendChild(submitButton);
+        var inputbtn = document.getElementById('submit-button');
+        inputbtn.addEventListener('click', handleSubmitClick);
+
+        // 제출하기 버튼 클릭 시 실행되는 함수
+        function handleSubmitClick() {
+
+            scene3_1.pause();
+            scene3_2.pause();
+            scene4.play();
+            
+            if(state == 1){
+                
+                saveData(); // 데이터 저장
+                let name = document.getElementById("input-1").value;
+                let milkQty = document.getElementById("input-2").value;
+                let batteryQty = document.getElementById("input-3").value;
+                var todayDate = getTodayDate();
+                
+                // 제목을 담은 div 엘리먼트 생성
+                var title = document.createElement("div");
+                title.classList.add("titlespan");
+                title.innerHTML = "제출이 정상적으로 완료되었습니다!🎉<br>감사합니다!🤗";
+
+                // 기존 내용 삭제
+                document.body.innerHTML = "";
+
+                // 애니메이션 적용
+                title.classList.add("scene-transition");
+
+                // 컨테이너를 생성하여 title을 감싸줍니다.
+                var container = document.createElement("div");
+                container.style.display = "flex";
+                container.style.justifyContent = "center";
+                container.style.alignItems = "center";
+                container.style.height = "10vh"; // 화면의 100% 높이를 기준으로 컨테이너를 설정합니다.
+
+                // 제목을 container에 추가합니다.
+                container.appendChild(title);
+
+                // 컨테이너를 body에 추가합니다.
+                document.body.appendChild(container);
+
+                // 제목 위치를 아래로 조금 내립니다.
+                title.style.marginTop = "100px"; // 조정 가능한 값입니다.
+                
+                // 직사각형 요소 만들기 [화장지]
+                const roundedRectangle = document.createElement('div');
+
+                roundedRectangle.classList.add("scene-transition");
+                roundedRectangle.style.position = 'absolute';
+                roundedRectangle.style.left = '50%';
+                roundedRectangle.style.top = '35%';
+                roundedRectangle.style.transform = 'translate(-50%, -50%)';
+                roundedRectangle.style.width = '400px';
+                roundedRectangle.style.height = '100px';
+                roundedRectangle.style.backgroundColor = '#f0f0f0';
+                roundedRectangle.style.borderRadius = '30px';
+                roundedRectangle.style.padding = '20px';
+                roundedRectangle.style.display = 'flex';
+                roundedRectangle.style.alignItems = 'center';
+
+                // 이미지를 생성하고 스타일을 설정합니다.
+                const profileImg = document.createElement('img');
+                profileImg.src = 'image/화장지.png';
+                profileImg.style.width = '80px';
+                profileImg.style.height = '80px';
+                profileImg.style.borderRadius = '20%';
+                profileImg.style.marginRight = '20px';
+
+                // 텍스트를 생성하고 스타일을 설정합니다.
+                const greetingText = document.createElement('p');
+                const value = Math.floor(milkQty / 15);
+
+                // span 요소를 동적으로 생성하여 텍스트와 스타일을 설정합니다.
+                const spanElement = document.createElement('span');
+                spanElement.textContent = value;
+                spanElement.classList.add('emphasis'); // 'emphasis' 클래스 추가
+                spanElement.style.color = '#1e90ff'; // 'emphasis' 클래스의 텍스트 색을 빨간색으로 설정합니다.
+
+                // 'p' 요소의 스타일을 설정합니다.
+                greetingText.style.fontSize = '25px'; // 폰트 사이즈를 15로 설정합니다.
+                greetingText.style.color = 'black'; // 텍스트 색을 검정색으로 설정합니다.
+
+                // 'span' 요소를 'p' 요소 안에 추가합니다.
+                greetingText.appendChild(document.createTextNode('화장지: '));
+                greetingText.appendChild(spanElement);
+                greetingText.appendChild(document.createTextNode('개'));
+
+                // 이미지와 텍스트를 직사각형 안에 추가합니다.
+                roundedRectangle.appendChild(profileImg);
+                roundedRectangle.appendChild(greetingText);
+
+                // body 요소에 생성한 요소를 추가합니다.
+                document.body.appendChild(roundedRectangle);
+
+
+
+
+
+                // 직사각형 요소 만들기 [종량제봉투]
+                const roundedRectangle2 = document.createElement('div');
+
+                roundedRectangle2.classList.add("scene-transition");
+                roundedRectangle2.style.position = 'absolute';
+                roundedRectangle2.style.left = '50%';
+                roundedRectangle2.style.top = '60%';
+                roundedRectangle2.style.transform = 'translate(-50%, -50%)';
+                roundedRectangle2.style.width = '400px';
+                roundedRectangle2.style.height = '100px';
+                roundedRectangle2.style.backgroundColor = '#f0f0f0';
+                roundedRectangle2.style.borderRadius = '30px';
+                roundedRectangle2.style.padding = '20px';
+                roundedRectangle2.style.display = 'flex';
+                roundedRectangle2.style.alignItems = 'center';
+
+                // 이미지를 생성하고 스타일을 설정합니다.
+                const profileImg2 = document.createElement('img');
+                profileImg2.src = 'image/종량제봉투.png';
+                profileImg2.style.width = '80px';
+                profileImg2.style.height = '80px';
+                profileImg2.style.borderRadius = '20%';
+                profileImg2.style.marginRight = '20px';
+
+                // 텍스트를 생성하고 스타일을 설정합니다.
+                const greetingText2 = document.createElement('p');
+                const value2 = Math.floor(batteryQty / 25);
+
+                // span 요소를 동적으로 생성하여 텍스트와 스타일을 설정합니다.
+                const spanElement2 = document.createElement('span');
+                spanElement2.textContent = value2;
+                spanElement2.classList.add('emphasis'); // 'emphasis' 클래스 추가
+                spanElement2.style.color = '#1e90ff'; // 'emphasis' 클래스의 텍스트 색을 빨간색으로 설정합니다.
+
+                // 'p' 요소의 스타일을 설정합니다.
+                greetingText2.style.fontSize = '25px'; // 폰트 사이즈를 15로 설정합니다.
+                greetingText2.style.color = 'black'; // 텍스트 색을 검정색으로 설정합니다.
+
+                // 'span' 요소를 'p' 요소 안에 추가합니다.
+                greetingText2.appendChild(document.createTextNode('종량제봉투: '));
+                greetingText2.appendChild(spanElement2);
+                greetingText2.appendChild(document.createTextNode('장'));
+
+                // 이미지와 텍스트를 직사각형 안에 추가합니다.
+                roundedRectangle2.appendChild(profileImg2);
+                roundedRectangle2.appendChild(greetingText2);
+
+                // body 요소에 생성한 요소를 추가합니다.
+                document.body.appendChild(roundedRectangle2);
+                
+
+
+                // 미수증 출력 버튼 생성
+                var backButton1 = document.createElement("div");
+                backButton1.className = "submitMain";
+                backButton1.textContent = "🖨️미수증 출력";
+
+                // 메인화면으로 돌아가는 버튼 생성
+                var backButton2 = document.createElement("div");
+                backButton2.className = "submit";
+                backButton2.textContent = "🏠메인화면으로";
+
+
+                // 메인화면으로 돌아가는 버튼 스타일을 설정합니다.
+                backButton1.style.position = "fixed";
+                backButton1.style.bottom = "100px";
+                backButton1.style.left = "53%";
+                /* backButton1.style.transform = "translateX(-50%)"; */
+
+                backButton1.style.cursor = "pointer";
+
+                // 메인화면으로 돌아가는 버튼 스타일을 설정합니다.
+                backButton2.style.position = "fixed";
+                backButton2.style.bottom = "100px";
+                backButton2.style.right = "53%";
+                /* backButton2.style.transform = "translateX(-50%)"; */
+
+                backButton2.style.cursor = "pointer";
+
+                // 미수증 출력 버튼을 body에 추가합니다.
+                document.body.appendChild(backButton1);
+
+                // 미수증 출력 버튼을 body에 추가합니다.
+                document.body.appendChild(backButton2);
+
+                
+
+                // 메인화면 버튼 클릭시 새로고침
+                backButton2.addEventListener("click", function() {
+                    location.reload();
+                });
+
+                // 미수증 출력 버튼 클릭 시 미수증 출력 화면으로 전환
+                backButton1.addEventListener("click", function() {
+                scene4.pause();
+                document.body.innerHTML = ""; // 화면 지우기
+                var message = document.createElement("h3");
+                message.id = "message";
+                var todayDate = getTodayDate();
+
+                // 우유팩 미수증 정보 출력
+                const container = document.createElement("div");
+                container.className = "container";
+                document.body.appendChild(container);
+
+                const h1 = document.createElement("h1");
+                h1.textContent = "미수령 확인증";
+                container.appendChild(h1);
+
+                const infoList = [
+                { label: "담당동:", value: "성남동" },
+                { label: "미수령 화장지:", value: Math.floor(milkQty/15) },
+                { label: "미수령 종량제봉투:", value: Math.floor(batteryQty/25) },
+                { label: "배출일자:", value: todayDate}
+                ];
+
+                infoList.forEach(info => {
+                const infoDiv = document.createElement("div");
+                infoDiv.className = "info";
+                const labelSpan = document.createElement("span");
+                labelSpan.textContent = info.label;
+                const valueStrong = document.createElement("strong");
+                valueStrong.textContent = info.value;
+                infoDiv.appendChild(labelSpan);
+                infoDiv.appendChild(valueStrong);
+                container.appendChild(infoDiv);
+                });
+
+
+                // 애니메이션 클래스 추가하여 씬 전환 애니메이션 적용
+                container.classList.add("scene-transition");
+
+                // QR이미지 추가
+                const qrImage = document.createElement("img");
+                qrImage.src = "qr.png"; // Make sure "qr.png" is in the same directory as your HTML file
+                qrImage.alt = "QR Code";
+                qrImage.style.display = "block";
+                qrImage.style.width = "350px";
+                qrImage.style.margin = "20px auto"; // Adjust the margin as needed
+                container.appendChild(qrImage);
+
+                // QR이미지 설명
+                const additionalInfoTitle = document.createElement("h2");
+                const additionalInfoTitle2 = document.createElement("h3");
+                additionalInfoTitle.textContent = "⬆화장지 종량제봉투 재고 확인하기⬆";
+                additionalInfoTitle2.textContent = "스마트폰 카메라로 QR 코드를 찍어주세요";
+
+                additionalInfoTitle.style.textAlign = "center";
+                additionalInfoTitle.style.color = "#333";
+                container.appendChild(additionalInfoTitle);
+
+                additionalInfoTitle2.style.textAlign = "center";
+                additionalInfoTitle2.style.color = "#333";
+                container.appendChild(additionalInfoTitle2);
+
+                // CSS 스타일 생성 및 적용
+                const style = document.createElement("style");
+                style.textContent = `
+                body {
+                    font-family: Arial, sans-serif;
+                    background-color: #f8f8f8;
+                }
+                .container {
+                    max-width: 400px;
+                    margin: 50px auto;
+                    padding: 20px;
+                    background-color: #fff;
+                    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+                    border-radius: 5px;
+                }
+                h1 {
+                    text-align: center;
+                    margin-bottom: 30px;
+                    color: #333;
+                }
+                .info {
+                    font-size: 23px;
+                    display: flex;
+                    justify-content: space-between;
+                    margin-bottom: 15px;
+                }
+                .info span {
+                    color: #888;
+                }
+                .info strong {
+                    color: #333;
+                }
+                .barcode {
+                    width: 100%;
+                    height: 50px;
+                    background-color: #333;
+                    color: #fff;
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                    border-radius: 5px;
+                    font-weight: bold;
+                    font-size: 18px;
+                    letter-spacing: 2px;
+                }
+                .notice {
+                    margin-top: 30px;
+                    text-align: center;
+                    color: #888;
+                }
+                `;
+                
+                document.head.appendChild(style);
+                // 애니메이션이 재생된 후, 클래스 제거하여 다음 씬 전환을 위해 준비
+                setTimeout(function () {
+                    container.classList.remove("scene-transition");
+                }, 1000); // 2초간 애니메이션 재생
+                
+                setTimeout(function () { // 미수증 1.1초뒤 출력
+                    window.print();
+                }, 1100);
+            });
+               
+            } else if(state == 2){
+                saveData(); // 데이터 저장
+                let name = document.getElementById("input-1").value;
+                let milkQty = document.getElementById("input-4").value;
+                let batteryQty = document.getElementById("input-5").value;
+                var todayDate = getTodayDate();
+
+
+                // 제목을 담은 div 엘리먼트 생성
+                var title = document.createElement("div");
+                title.classList.add("titlespan");
+                title.innerHTML = "제출이 정상적으로 완료되었습니다!🎉<br>감사합니다!🤗";
+
+                // 기존 내용 삭제
+                document.body.innerHTML = "";
+
+                // 애니메이션 적용
+                title.classList.add("scene-transition");
+
+                // 컨테이너를 생성하여 title을 감싸줍니다.
+                var container = document.createElement("div");
+                container.style.display = "flex";
+                container.style.justifyContent = "center";
+                container.style.alignItems = "center";
+                container.style.height = "10vh"; // 화면의 100% 높이를 기준으로 컨테이너를 설정합니다.
+
+                // 제목을 container에 추가합니다.
+                container.appendChild(title);
+
+                // 컨테이너를 body에 추가합니다.
+                document.body.appendChild(container);
+
+                // 제목 위치를 아래로 조금 내립니다.
+                title.style.marginTop = "100px"; // 조정 가능한 값입니다.
+                
+                // 직사각형 요소 만들기 [화장지]
+                const roundedRectangle = document.createElement('div');
+
+                roundedRectangle.classList.add("scene-transition");
+                roundedRectangle.style.position = 'absolute';
+                roundedRectangle.style.left = '50%';
+                roundedRectangle.style.top = '35%';
+                roundedRectangle.style.transform = 'translate(-50%, -50%)';
+                roundedRectangle.style.width = '400px';
+                roundedRectangle.style.height = '100px';
+                roundedRectangle.style.backgroundColor = '#f0f0f0';
+                roundedRectangle.style.borderRadius = '30px';
+                roundedRectangle.style.padding = '20px';
+                roundedRectangle.style.display = 'flex';
+                roundedRectangle.style.alignItems = 'center';
+
+                // 이미지를 생성하고 스타일을 설정합니다.
+                const profileImg = document.createElement('img');
+                profileImg.src = 'image/화장지.png';
+                profileImg.style.width = '80px';
+                profileImg.style.height = '80px';
+                profileImg.style.borderRadius = '20%';
+                profileImg.style.marginRight = '20px';
+
+                // 텍스트를 생성하고 스타일을 설정합니다.
+                const greetingText = document.createElement('p');
+                const value = Math.floor(milkQty / 15);
+
+                // span 요소를 동적으로 생성하여 텍스트와 스타일을 설정합니다.
+                const spanElement = document.createElement('span');
+                spanElement.textContent = value;
+                spanElement.classList.add('emphasis'); // 'emphasis' 클래스 추가
+                spanElement.style.color = '#1e90ff'; // 'emphasis' 클래스의 텍스트 색을 빨간색으로 설정합니다.
+
+                // 'p' 요소의 스타일을 설정합니다.
+                greetingText.style.fontSize = '25px'; // 폰트 사이즈를 15로 설정합니다.
+                greetingText.style.color = 'black'; // 텍스트 색을 검정색으로 설정합니다.
+
+                // 'span' 요소를 'p' 요소 안에 추가합니다.
+                greetingText.appendChild(document.createTextNode('화장지: '));
+                greetingText.appendChild(spanElement);
+                greetingText.appendChild(document.createTextNode('개'));
+
+                // 이미지와 텍스트를 직사각형 안에 추가합니다.
+                roundedRectangle.appendChild(profileImg);
+                roundedRectangle.appendChild(greetingText);
+
+                // body 요소에 생성한 요소를 추가합니다.
+                document.body.appendChild(roundedRectangle);
+
+
+
+
+
+                // 직사각형 요소 만들기 [종량제봉투]
+                const roundedRectangle2 = document.createElement('div');
+
+                roundedRectangle2.classList.add("scene-transition");
+                roundedRectangle2.style.position = 'absolute';
+                roundedRectangle2.style.left = '50%';
+                roundedRectangle2.style.top = '60%';
+                roundedRectangle2.style.transform = 'translate(-50%, -50%)';
+                roundedRectangle2.style.width = '400px';
+                roundedRectangle2.style.height = '100px';
+                roundedRectangle2.style.backgroundColor = '#f0f0f0';
+                roundedRectangle2.style.borderRadius = '30px';
+                roundedRectangle2.style.padding = '20px';
+                roundedRectangle2.style.display = 'flex';
+                roundedRectangle2.style.alignItems = 'center';
+
+                // 이미지를 생성하고 스타일을 설정합니다.
+                const profileImg2 = document.createElement('img');
+                profileImg2.src = 'image/종량제봉투.png';
+                profileImg2.style.width = '80px';
+                profileImg2.style.height = '80px';
+                profileImg2.style.borderRadius = '20%';
+                profileImg2.style.marginRight = '20px';
+
+                // 텍스트를 생성하고 스타일을 설정합니다.
+                const greetingText2 = document.createElement('p');
+                const value2 = Math.floor(batteryQty / 25);
+
+                // span 요소를 동적으로 생성하여 텍스트와 스타일을 설정합니다.
+                const spanElement2 = document.createElement('span');
+                spanElement2.textContent = value2;
+                spanElement2.classList.add('emphasis'); // 'emphasis' 클래스 추가
+                spanElement2.style.color = '#1e90ff'; // 'emphasis' 클래스의 텍스트 색을 빨간색으로 설정합니다.
+
+                // 'p' 요소의 스타일을 설정합니다.
+                greetingText2.style.fontSize = '25px'; // 폰트 사이즈를 15로 설정합니다.
+                greetingText2.style.color = 'black'; // 텍스트 색을 검정색으로 설정합니다.
+
+                // 'span' 요소를 'p' 요소 안에 추가합니다.
+                greetingText2.appendChild(document.createTextNode('종량제봉투: '));
+                greetingText2.appendChild(spanElement2);
+                greetingText2.appendChild(document.createTextNode('장'));
+
+                // 이미지와 텍스트를 직사각형 안에 추가합니다.
+                roundedRectangle2.appendChild(profileImg2);
+                roundedRectangle2.appendChild(greetingText2);
+
+                // body 요소에 생성한 요소를 추가합니다.
+                document.body.appendChild(roundedRectangle2);
+
+                // 미수증 출력 버튼 생성
+                var backButton1 = document.createElement("div");
+                backButton1.className = "submitMain";
+                backButton1.textContent = "🖨️미수증 출력";
+
+                // 메인화면으로 돌아가는 버튼 생성
+                var backButton2 = document.createElement("div");
+                backButton2.className = "submit";
+                backButton2.textContent = "🏠메인화면으로";
+
+
+                // 메인화면으로 돌아가는 버튼 스타일을 설정합니다.
+                backButton1.style.position = "fixed";
+                backButton1.style.bottom = "100px";
+                backButton1.style.left = "53%";
+                /* backButton1.style.transform = "translateX(-50%)"; */
+
+                backButton1.style.cursor = "pointer";
+
+                // 메인화면으로 돌아가는 버튼 스타일을 설정합니다.
+                backButton2.style.position = "fixed";
+                backButton2.style.bottom = "100px";
+                backButton2.style.right = "53%";
+                /* backButton2.style.transform = "translateX(-50%)"; */
+
+                backButton2.style.cursor = "pointer";
+
+                // 미수증 출력 버튼을 body에 추가합니다.
+                document.body.appendChild(backButton1);
+
+                // 미수증 출력 버튼을 body에 추가합니다.
+                document.body.appendChild(backButton2);
+
+                // 애니메이션이 재생된 후, 클래스 제거하여 다음 씬 전환을 위해 준비
+                setTimeout(function () {
+                    actionContainer.classList.remove("scene-transition");
+                }, 1000); // 2초간 애니메이션 재생
+
+                // 메인화면 버튼 클릭시 새로고침
+                backButton2.addEventListener("click", function() {
+                    location.reload();
+                });
+
+                // 미수증 출력 버튼 클릭 시 미수증 출력 화면으로 전환
+                backButton1.addEventListener("click", function() {
+                    scene4.pause();
+                    document.body.innerHTML = ""; // 화면 지우기
+                var message = document.createElement("h3");
+                message.id = "message";
+                var todayDate = getTodayDate();
+
+                // 우유팩 미수증 정보 출력
+                const container = document.createElement("div");
+                container.className = "container";
+                document.body.appendChild(container);
+
+                const h1 = document.createElement("h1");
+                h1.textContent = "미수령 확인증";
+                container.appendChild(h1);
+
+                const infoList = [
+                { label: "담당동:", value: "성남동" },
+                { label: "미수령 화장지:", value: Math.floor(milkQty/15) },
+                { label: "미수령 종량제봉투:", value: Math.floor(batteryQty/25) },
+                { label: "배출일자:", value: todayDate}
+                ];
+
+                infoList.forEach(info => {
+                const infoDiv = document.createElement("div");
+                infoDiv.className = "info";
+                const labelSpan = document.createElement("span");
+                labelSpan.textContent = info.label;
+                const valueStrong = document.createElement("strong");
+                valueStrong.textContent = info.value;
+                infoDiv.appendChild(labelSpan);
+                infoDiv.appendChild(valueStrong);
+                container.appendChild(infoDiv);
+                });
+
+
+                // 애니메이션 클래스 추가하여 씬 전환 애니메이션 적용
+                container.classList.add("scene-transition");
+
+                // QR이미지 추가
+                const qrImage = document.createElement("img");
+                qrImage.src = "qr.png"; // Make sure "qr.png" is in the same directory as your HTML file
+                qrImage.alt = "QR Code";
+                qrImage.style.display = "block";
+                qrImage.style.width = "350px";
+                qrImage.style.margin = "20px auto"; // Adjust the margin as needed
+                container.appendChild(qrImage);
+
+                // QR이미지 설명
+                const additionalInfoTitle = document.createElement("h2");
+                const additionalInfoTitle2 = document.createElement("h3");
+                additionalInfoTitle.textContent = "⬆화장지 종량제봉투 재고 확인하기⬆";
+                additionalInfoTitle2.textContent = "스마트폰 카메라로 QR 코드를 찍어주세요";
+
+                additionalInfoTitle.style.textAlign = "center";
+                additionalInfoTitle.style.color = "#333";
+                container.appendChild(additionalInfoTitle);
+
+                additionalInfoTitle2.style.textAlign = "center";
+                additionalInfoTitle2.style.color = "#333";
+                container.appendChild(additionalInfoTitle2);
+
+                // 애니메이션 클래스 추가하여 씬 전환 애니메이션 적용
+                container.classList.add("scene-transition");
+
+                // CSS 스타일 생성 및 적용
+                const style = document.createElement("style");
+                
+                style.textContent = `
+                body {
+                    font-family: Arial, sans-serif;
+                    background-color: #f8f8f8;
+                }
+                .container {
+                    max-width: 400px;
+                    margin: 50px auto;
+                    padding: 20px;
+                    background-color: #fff;
+                    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+                    border-radius: 5px;
+                }
+                h1 {
+                    text-align: center;
+                    margin-bottom: 30px;
+                    color: #333;
+                }
+                .info {
+                    font-size: 23px;
+                    display: flex;
+                    justify-content: space-between;
+                    margin-bottom: 15px;
+                }
+                .info span {
+                    color: #888;
+                }
+                .info strong {
+                    color: #333;
+                }
+                .barcode {
+                    width: 100%;
+                    height: 50px;
+                    background-color: #333;
+                    color: #fff;
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                    border-radius: 5px;
+                    font-weight: bold;
+                    font-size: 18px;
+                    letter-spacing: 2px;
+                }
+                .notice {
+                    margin-top: 30px;
+                    text-align: center;
+                    color: #888;
+                }
+                `;
+                document.head.appendChild(style);
+                // 애니메이션이 재생된 후, 클래스 제거하여 다음 씬 전환을 위해 준비
+                setTimeout(function () {
+                    actionContainer.classList.remove("scene-transition");
+                }, 1000); // 2초간 애니메이션 재생
+                
+                setTimeout(function () { // 미수증 1.1초뒤 출력
+                    window.print();
+                }, 1100);
+                });
+            }
+        }
+
+        // 숫자만 입력하도록 강제하는 함수
+        function validateNumberInput(event) {
+            const input = event.target;
+            const value = input.value;
+
+            // 입력값이 숫자가 아니고 백스페이스 키도 아닌 경우 제거하고 경고 메시지 출력
+            if (!/^[0-9]+$/.test(value) && !(event.key === "Backspace" && value.length === 1)) {
+            input.value = value.replace(/[^0-9]/g, "");
+            showPopup();
+            }
+        }
+
+      // 팝업창
+      function showPopup() {
+        const popup = document.createElement("div");
+        popup.textContent = "※수량칸에는 숫자만 입력해주세요!※";
+        popup.classList.add("popup"); // 팝업 스타일을 적용하기 위한 클래스 추가
+        document.body.appendChild(popup);
+
+        // 팝업 창이 사라지도록 설정
+        setTimeout(function () {
+          popup.remove();
+        }, 1000
+        ); // 2초 후에 팝업 창을 제거합니다.
+      }
+    }
+
+    // 데이터를 저장할 배열들
+    let milkData = JSON.parse(localStorage.getItem('milkData')) || [];
+    let batteryData = JSON.parse(localStorage.getItem('batteryData')) || [];
+
+    // 데이터 저장 함수
+    function saveData() {
+        if(state == 1){
+            var name = document.getElementById("input-1").value;
+            var address = "";
+            var phone = "";
+            var milkQty = document.getElementById('input-2').value;
+            var batteryQty = document.getElementById('input-3').value;
+        } else if(state == 2){
+            var name = document.getElementById("input-1").value;
+            var address = document.getElementById('input-2').value;
+            var phone = document.getElementById('input-3').value;
+            var milkQty = document.getElementById('input-4').value;
+            var batteryQty = document.getElementById('input-5').value;
+        }
+
+        // 데이터를 객체로 만들어서 각각의 배열에 추가
+        const data = {
+            이름: name,
+            날짜: new Date().toLocaleDateString("en-US", { month: "2-digit", day: "2-digit" }), // 월-일 형식으로 추가
+        };
+        
+        data['주소'] = address;
+        data['전화번호'] = phone;
+
+        if (milkQty > 0) {
+            data['우유팩 수량'] = milkQty;
+            milkData.push(data);
+        }
+
+        if (batteryQty > 0) {
+            data['건전지 수량'] = batteryQty;
+            batteryData.push(data);
+        }
+
+        // 로컬 스토리지에 데이터를 문자열로 변환하여 각각의 파일로 저장
+        localStorage.setItem('milkData', JSON.stringify(milkData));
+        localStorage.setItem('batteryData', JSON.stringify(batteryData));
+    }
+
+        // CSV 파일로 내보내기 함수 (우유팩 데이터)
+        function exportMilkDataToCSV() {
+            exportToCSV('우유팩.csv', milkData, ['날짜', '이름', '주소', '전화번호', '우유팩 수량']);
+        }
+
+        // CSV 파일로 내보내기 함수 (건전지 데이터)
+        function exportBatteryDataToCSV() {
+            exportToCSV('건전지.csv', batteryData, ['날짜', '이름', '주소', '전화번호', '건전지 수량']);
+        }
+
+        // CSV 파일로 내보내기 함수
+        function exportToCSV(fileName, data, columns) {
+        // 배열의 첫 번째 요소를 가져와서 CSV의 열 이름을 만듦
+        const csvColumns = columns.join(',');
+
+        // 각 데이터를 CSV 형식으로 변환하여 추가
+        let csvContent = csvColumns + '\n' + data.map(item => columns.map(columns => item[columns]).join(',')).join('\n');
+
+        //
+        const csvData = "\uFEFF" + csvContent;
+
+        // CSV 데이터를 Blob 객체로 변환
+        const blob = new Blob([csvData], { type: 'text/csv;charset=utf-8;' });
+
+        // CSV 파일 다운로드 링크 생성
+        const downloadLink = document.createElement('a');
+        downloadLink.href = URL.createObjectURL(blob);
+        downloadLink.download = fileName;
+        downloadLink.click();
+    }
+
+    function getTodayDate(){
+        var today = new Date();
+        var year = today.getFullYear().toString().slice(-2); // 년도에서 끝의 두 자리만 가져옵니다.
+        var month = today.getMonth() + 1;
+        var day = today.getDate();
+
+        month = month < 10 ? '0' + month : month;
+        day = day < 10 ? '0' + day : day;
+
+        return year + '.' + month + '.' + day;
+    }
+
+    
+    // = 버튼 누른 상태를 감지하는 함수
+    function handleKeyDown(event) {
+        if (event.key === "=") {
+            // = 버튼이 눌려진 상태에서만 실행할 함수를 호출
+            exportMilkDataToCSV();
+            exportBatteryDataToCSV();
+        }
+    }
+
+    // document의 keydown 이벤트에 handleKeyDown 함수를 연결
+    document.addEventListener('keydown', handleKeyDown);
+    </script>
   </body>
 </html>
