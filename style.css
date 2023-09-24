@@ -1,0 +1,148 @@
+@font-face {
+  font-family: LINESeedKR-Bd;
+  src: url("font/LINESeedKR-Bd.woff");
+}
+
+body {
+  font-family: LINESeedKR-Bd;
+  background-color: #1a1a1a; /* Slightly lighter background color for the dark mode */
+  color: #ffffff; /* Text color for the dark mode */
+  line-height: 1.6;
+}
+
+body * {
+  font-family: LINESeedKR-Bd;
+}
+
+.Quest_mainitem p{
+  font-size: 35px;
+}
+
+.main-container {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  height: 150px;
+  margin-top: 25px;
+}
+
+.mainitem {
+  text-align: center;
+  flex: 80%;
+  
+}
+
+.action-container {
+  display: flex;
+  height: 400px;
+  justify-content: center;
+  align-items: center;
+  justify-content: space-evenly;
+}
+
+.nextui {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  justify-content: space-evenly;
+}
+
+input {
+  border: 3px solid #ffffff; /* White border for the dark mode */
+  border-radius: 10px;
+  padding: 12px 24px;
+  font-size: 18px;
+  width: 355px;
+  background-color: transparent; /* Make input background transparent */
+  color: #ffffff; /* Text color for the dark mode */
+  transition: border-color 0.3s ease;
+}
+
+input:focus {
+  outline: none;
+  border-color: #1e90ff; /* Focus color for the input */
+}
+
+.submit{
+  border-radius: 15px;
+  padding: 12px 40px;
+  background-color: #1e90ff;
+  color: #ffffff;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.submitMain{
+  border-radius: 15px;
+  padding: 12px 40px;
+  background-color: #1e90ff;
+  color: #ffffff;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.submit:hover {
+  background-color: #005aff; /* Hover color for the submit button */
+}
+
+.submitMain:hover {
+  background-color: #005aff; /* Hover color for the submit button */
+}
+
+.span {
+  font-size: 30px;
+  color: #F0F0F0;
+  background-color: #1e90ff;
+}
+
+.titlespan {
+  font-size: 35px;
+}
+
+.popup {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: #e40000;
+  color: white;
+  padding: 10px;
+  border: 1px solid #ffffff; /* White border for the dark mode */
+  box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.2);
+  font-family: Arial, sans-serif;
+  font-size: 20px;
+  font-weight: bold;
+}
+
+.simpleText {
+  text-align: center;
+  font-size: 30px;
+}
+
+.simpleText2 {
+  text-align: center;
+  font-size: 25px;
+}
+
+.imgg {
+  border-radius: 60px; /* Slightly more rounded corners for the images */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Add a subtle box shadow */
+}
+
+@keyframes fadeInOut {
+  0% {
+    opacity: 0;
+  }
+
+  100% {
+    opacity: 1;
+  }
+}
+
+.scene-transition {
+  animation: fadeInOut 0.7s ease;
+}
+
+.emphasis{
+  font-size: 35px;
+}
